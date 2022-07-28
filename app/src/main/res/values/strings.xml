@@ -9,7 +9,7 @@
     <string name="rating">Rating</string>
     <string name="insert">Insert</string>
     <string name="showList">Show List</string>
-    <string name="displayPG13">SHOW ALL PG-13 MOVIES</string>
+    <string name="displayPG13">v SHOW ALL MOVIES WITH THIS RATING v</string>
     <string name="movieID">Movie ID</string>
     <string name="btnUpdate">Update</string>
     <string name="btnDelete">Delete</string>

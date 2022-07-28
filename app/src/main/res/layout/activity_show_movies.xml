@@ -4,16 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnPG13"
-        android:layout_margin="10dp"
+
+    <TextView
+        android:id="@+id/textViewGuide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/displayPG13" />
+        android:layout_margin="10dp"
+        android:text="Choose the Rating that you desire below"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+    <Spinner
+        android:id="@+id/spinOptRating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/spinnerItems" />
 
     <ListView
         android:id="@+id/lvMovies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp" />
 
 </LinearLayout>

@@ -6,19 +6,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class showMovies extends AppCompatActivity {
 
     ListView lvMovies;
+    TextView tvSearch;
     Button btnPG13;
     CustomAdapter caMovie;
     ArrayList<Movie> filteredList;
     ArrayList<Movie> sortPG13List;
-    Boolean state = false;
+    HashSet<String> spinnerSet = new HashSet<String>();
+    Spinner spinOptRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +32,8 @@ public class showMovies extends AppCompatActivity {
         setContentView(R.layout.activity_show_movies);
 
         lvMovies = findViewById(R.id.lvMovies);
-        btnPG13 = findViewById(R.id.btnPG13);
-
+        tvSearch = findViewById(R.id.textViewGuide);
+        spinOptRating = findViewById(R.id.spinOptRating);
         filteredList = new ArrayList<Movie>();
         sortPG13List = new ArrayList<Movie>();
 
@@ -39,6 +45,22 @@ public class showMovies extends AppCompatActivity {
         sortPG13List.addAll(dbh.getAllMovies());
         filteredList.addAll(dbh.getAllMovies());
         caMovie.notifyDataSetChanged();
+
+        ArrayList<String> spinnerArray = new ArrayList<String>(spinnerSet);
+        spinnerArray.add(0, "All Ratings");
+        spinnerArray.add(1, "G");
+        spinnerArray.add(2, "PG");
+        spinnerArray.add(3, "PG13");
+        spinnerArray.add(4, "NC16");
+        spinnerArray.add(5, "M18");
+        spinnerArray.add(6, "R21");
+
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerArray
+        );
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinOptRating.setAdapter(spinnerAdapter);
 
         lvMovies.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -53,30 +75,35 @@ public class showMovies extends AppCompatActivity {
             }
         });
 
-        btnPG13.setOnClickListener(new View.OnClickListener() {
+
+        spinOptRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                state = !state;
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 filteredList.clear();
-                if (state) {
-                    btnPG13.setText("DISPLAY ALL MOVIES");
+                if (position != 0) {
                     for (Movie element : sortPG13List
                     ) {
-                        if (element.getmRatings().equals("PG13")) {
+                        if (String.valueOf(element.getmRatings()).equals(spinnerArray.get(position))) {
+                            tvSearch.setText("You have chosen the " + element.getmRatings() + " Rating!");
                             filteredList.add(element);
                         }
                     }
                 } else {
-                    btnPG13.setText("SHOW ALL PG-13 MOVIES");
+                    tvSearch.setText("Choose the Rating that you desire below");
                     filteredList.addAll(sortPG13List);
                 }
 
                 caMovie.notifyDataSetChanged();
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
         });
 
-
     }
+
 
     @Override
     protected void onResume() {
